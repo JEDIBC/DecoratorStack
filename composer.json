@@ -1,5 +1,5 @@
 {
-  "name": "JEDIBC/DecoratorStack",
+  "name": "jedibc/decorator-stack",
   "description": "A simple tool for stacking decorators",
   "keywords": [
     "decorator",
