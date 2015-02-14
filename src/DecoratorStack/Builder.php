@@ -42,6 +42,19 @@ class Builder
     }
 
     /**
+     * @param string $className
+     * @param array  $args
+     *
+     * @return $this
+     */
+    public function unshift($className, array $args = [])
+    {
+        $this->stack->unshift([$className, $args]);
+
+        return $this;
+    }
+
+    /**
      * @param mixed $object
      *
      * @return mixed object

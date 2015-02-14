@@ -36,8 +36,26 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
     public function testDecoration()
     {
         /* @var $decoratedObject DummyInterface */
-        $decoratedObject = (new Builder('\Tests\DecoratorStack\DummyInterface'))->push('\Tests\DecoratorStack\DummyDecorator')->resolve(new DummyObject());
+        $decoratedObject = (new Builder('\Tests\DecoratorStack\DummyInterface'))
+            ->push('\Tests\DecoratorStack\DummyDecorator')
+            ->resolve(new DummyObject());
 
         $this->assertEquals('>>> Dummy <<<', $decoratedObject->process());
+
+        /* @var $decoratedObject DummyInterface */
+        $decoratedObject = (new Builder('\Tests\DecoratorStack\DummyInterface'))
+            ->push('\Tests\DecoratorStack\DummyDecorator2')
+            ->push('\Tests\DecoratorStack\DummyDecorator')
+            ->resolve(new DummyObject());
+
+        $this->assertEquals('((( >>> Dummy <<< )))', $decoratedObject->process());
+
+        /* @var $decoratedObject DummyInterface */
+        $decoratedObject = (new Builder('\Tests\DecoratorStack\DummyInterface'))
+            ->push('\Tests\DecoratorStack\DummyDecorator2')
+            ->unshift('\Tests\DecoratorStack\DummyDecorator')
+            ->resolve(new DummyObject());
+
+        $this->assertEquals('>>> ((( Dummy ))) <<<', $decoratedObject->process());
     }
 }
