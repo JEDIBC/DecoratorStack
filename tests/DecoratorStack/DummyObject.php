@@ -8,11 +8,25 @@ namespace Tests\DecoratorStack;
  */
 class DummyObject implements DummyInterface
 {
+
+    /**
+     * @var string
+     */
+    protected $text = '';
+
+    /**
+     * @param string $text
+     */
+    function __construct($text = 'Dummy')
+    {
+        $this->text = $text;
+    }
+
     /**
      * @return string
      */
     public function process()
     {
-        return 'Dummy';
+        return $this->text;
     }
 }

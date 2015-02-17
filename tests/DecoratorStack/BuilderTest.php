@@ -33,29 +33,55 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function testDecoration()
+    public function testObjectReturnedIfNoDecoratorDefined()
+    {
+        $this->assertEquals(
+            'Dummy',
+            (new Builder('\Tests\DecoratorStack\DummyInterface'))
+                ->resolve(new DummyObject())
+                ->process()
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function testDecorationPushAndUnshift()
     {
         /* @var $decoratedObject DummyInterface */
         $decoratedObject = (new Builder('\Tests\DecoratorStack\DummyInterface'))
             ->push('\Tests\DecoratorStack\DummyDecorator')
+            ->push('\Tests\DecoratorStack\DummyDecorator2')
+            ->push('\Tests\DecoratorStack\DummyDecorator3')
             ->resolve(new DummyObject());
 
-        $this->assertEquals('>>> Dummy <<<', $decoratedObject->process());
+        $this->assertEquals('>>> ((( [[[ Dummy ]]] ))) <<<', $decoratedObject->process());
 
         /* @var $decoratedObject DummyInterface */
         $decoratedObject = (new Builder('\Tests\DecoratorStack\DummyInterface'))
             ->push('\Tests\DecoratorStack\DummyDecorator2')
-            ->push('\Tests\DecoratorStack\DummyDecorator')
-            ->resolve(new DummyObject());
-
-        $this->assertEquals('((( >>> Dummy <<< )))', $decoratedObject->process());
-
-        /* @var $decoratedObject DummyInterface */
-        $decoratedObject = (new Builder('\Tests\DecoratorStack\DummyInterface'))
-            ->push('\Tests\DecoratorStack\DummyDecorator2')
+            ->push('\Tests\DecoratorStack\DummyDecorator3')
             ->unshift('\Tests\DecoratorStack\DummyDecorator')
             ->resolve(new DummyObject());
 
-        $this->assertEquals('>>> ((( Dummy ))) <<<', $decoratedObject->process());
+        $this->assertEquals('>>> ((( [[[ Dummy ]]] ))) <<<', $decoratedObject->process());
+    }
+
+    /**
+     * @test
+     */
+    public function testMultipleResolveWithSameStack()
+    {
+        /* @var $decoratedObject DummyInterface */
+        $builder = (new Builder('\Tests\DecoratorStack\DummyInterface'))
+            ->push('\Tests\DecoratorStack\DummyDecorator')
+            ->push('\Tests\DecoratorStack\DummyDecorator2')
+            ->push('\Tests\DecoratorStack\DummyDecorator3');
+
+        $decoratedObject1 = $builder->resolve(new DummyObject());
+        $decoratedObject2 = $builder->resolve(new DummyObject('FooBar'));
+
+        $this->assertEquals('>>> ((( [[[ Dummy ]]] ))) <<<', $decoratedObject1->process());
+        $this->assertEquals('>>> ((( [[[ FooBar ]]] ))) <<<', $decoratedObject2->process());
     }
 }
