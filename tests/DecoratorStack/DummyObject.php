@@ -17,7 +17,7 @@ class DummyObject implements DummyInterface
     /**
      * @param string $text
      */
-    function __construct($text = 'Dummy')
+    public function __construct($text = 'Dummy')
     {
         $this->text = $text;
     }
