@@ -21,6 +21,7 @@ class DummyDecorator2 implements DummyInterface
 
     /**
      * @param DummyInterface $object
+     * @param string         $string
      */
     public function __construct(DummyInterface $object, $string)
     {
