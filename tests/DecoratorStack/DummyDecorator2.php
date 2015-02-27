@@ -15,11 +15,17 @@ class DummyDecorator2 implements DummyInterface
     private $object;
 
     /**
+     * @var string
+     */
+    private $string;
+
+    /**
      * @param DummyInterface $object
      */
-    public function __construct(DummyInterface $object)
+    public function __construct(DummyInterface $object, $string)
     {
         $this->object = $object;
+        $this->string = $string;
     }
 
     /**
@@ -27,7 +33,7 @@ class DummyDecorator2 implements DummyInterface
      */
     public function process()
     {
-        return sprintf('((( %s )))', $this->object->process());
+        return sprintf('%s %s %s', $this->string, $this->object->process(), $this->string);
     }
 
 }
