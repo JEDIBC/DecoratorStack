@@ -25,7 +25,7 @@ $decoratedObject = new Foo\Bar\Decorator1(
 	new Foo\Bar\Decorator2(
     	new Foo\Bar\Decorator3(
         	new ObjectToDecorate()
-        ), $someConstuctorArgument)
+        ), [$someConstuctorArgument])
 );
 ```
 
@@ -36,7 +36,7 @@ With DecoratorStack, you can simplify it :
 ```php
 $stack = (new DecoratorStack\Builder('Foo\Bar\DummyInterface'))
 	->push('Foo\Bar\Decorator1')
-	->push('Foo\Bar\Decorator2', $someConstuctorArgument)
+	->push('Foo\Bar\Decorator2', [$someConstuctorArgument])
 	->push('Foo\Bar\Decorator3');
 
 $decoratedObject = $stack->resolve(new ObjectToDecorate())
